@@ -244,10 +244,39 @@ int deleteLeafNode(Node *head, int key)
 
 Node *searchRecursive(Node *ptr, int key)
 {
+	if (ptr == NULL) // 트리가 생성되지 않았으면,
+		return NULL;
+	if (ptr->key > key) // 트리가 오름차순임을 이용!
+		ptr = searchRecursive(ptr->left, key);
+	if (ptr->key < key)
+		ptr = searchRecursive(ptr->right, key);
+	if (ptr->key == key) // 위치를 찾았으면, 그 위치를 리턴한다.
+		return ptr;
 }
 
 Node *searchIterative(Node *head, int key)
 {
+	if (head == NULL) // 트리가 생성되지 않았으면,
+	{
+		printf("There is no tree.\n"); // 아무것도 실행하지 않고 종료한다.
+		return NULL;
+	}
+	if (head->left == NULL) // 트리에 노드가 하나도 없으면,
+	{
+		printf("Tree is empty.\n"); // 아무것도 실행하지 않고 종료한다.
+		return NULL;
+	}
+	Node *find = head->left; // 트리를 탐색하기 위한 노드
+	while (find != NULL)
+	{
+		if (find->key > key)	// 트리의 원소가 더 크면,
+			find = find->left;	// key는 트리의 왼쪽에 있을 확률이 크다.
+		if (find->key < key)	// 트리의 원소가 더 크면,
+			find = find->right; // key는 트리의 왼쪽에 있을 확률이 크다.
+		if (find->key == key)	// 원하는 위치에 도달했으면,
+			return find;		// 그 위치를 리턴한다.
+	}
+	return NULL; // 찾지 못했으면, NULL을 리턴한다.
 }
 
 int freeBST(Node *head)
