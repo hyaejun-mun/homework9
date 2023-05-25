@@ -202,6 +202,44 @@ int insert(Node *head, int key) // tree의 형식을 유지하면서 노드를 �
 
 int deleteLeafNode(Node *head, int key)
 {
+	if (head == NULL) // 트리가 생성되지 않았으면,
+	{
+		printf("There is no tree.\n"); // 아무것도 실행하지 않고 종료한다.
+		return 1;
+	}
+	if (head->left == NULL) // 트리에 노드가 하나도 없으면,
+	{
+		printf("Tree is empty.\n"); // 아무것도 실행하지 않고 종료한다.
+		return 1;
+	}
+	Node *p = head->left;
+	Node *parent = head;
+	while (p != NULL)
+	{
+		if (p->key == key) // 노드를 찾는다.
+		{
+			if (p->left == NULL && p->right == NULL) // 조건을 만족하면서, 리프 노드여야 한다.
+			{
+				if (parent == head) // 지울 노드가 루트인 경우
+					head->left = NULL;
+				if (parent->left == p) // 지울 노드의 위치 찾기(부모 노드의 링크 제거 위함)
+					parent->left = NULL;
+				else
+					parent->right = NULL;
+				free(p); // 링크 제거했으면, p 제거
+			}
+			else // 리프 노드가 아닌 경우
+				printf("That node is not leaf node.\n");
+			return 0; // key가 같은 다른 노드는 없으므로, 이제 종료한다.
+		}
+		parent = p;
+		if (p->key > key)
+			p = p->left;
+		else
+			p = p->right;
+	}
+	printf("There is no key.\n");
+	return 1;
 }
 
 Node *searchRecursive(Node *ptr, int key)
