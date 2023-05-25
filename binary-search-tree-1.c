@@ -31,7 +31,7 @@ Node *searchIterative(Node *head, int key); /* search the node for the key */
 int freeBST(Node *head);					/* free all memories allocated to the tree */
 
 /* you may add your own defined functions if necessary */
-
+void freetree(Node *p);
 int main()
 {
 	char command;
@@ -279,6 +279,28 @@ Node *searchIterative(Node *head, int key)
 	return NULL; // 찾지 못했으면, NULL을 리턴한다.
 }
 
+void freetree(Node *p)
+{
+	if (p == NULL) // p가 비어있을 경우, 그냥 종료.
+		return;
+	freetree(p->left); // p의 왼쪽, 오른쪽을 모두 할당 해제해주면
+	freetree(p->right);
+	free(p); // 자기 자신도 풀어준다.
+}
+
 int freeBST(Node *head)
 {
+	if (head == NULL) // 아무 실행도 안하고 종료할 경우
+	{
+		return 1;
+	}
+	if (head->left == NULL) // 헤드 생성(z)만 하고 종료할 경우
+	{
+		free(head);
+		return 1;
+	}
+	Node *p = head->left; // 트리 돌아다니면서 할당 해제할 포인터.
+	freetree(p);		  // 제거 함수를 재귀로 구현하기 위해 따로 함수를 만든다.
+	free(head);
+	return 0;
 }
